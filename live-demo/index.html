@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Form - Dark UI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #2a2a2a;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+        h2 {
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ccc;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background-color: #3a3a3a;
+            color: #f0f0f0;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="number"]:focus,
+        textarea:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Student Registration</h2>
+        <form action="display.php" method="POST">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="studentId">Student ID:</label>
+                <input type="text" id="studentId" name="studentId" required>
+            </div>
+            <div class="form-group">
+                <label for="major">Major:</label>
+                <input type="text" id="major" name="major">
+            </div>
+            <div class="form-group">
+                <label for="gpa">GPA:</label>
+                <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="4">
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
