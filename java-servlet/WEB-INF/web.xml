@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  web.xml — Deployment Descriptor
-  
-  Maps the URL pattern "/DisplayServlet" to the DisplayServlet class.
-  When student.html submits to action="DisplayServlet", this file
-  tells Tomcat which Java class handles that URL.
-  
-  Note: The @WebServlet("/DisplayServlet") annotation in the .java file
-  does the same thing. Both are included here for academic completeness.
+  web.xml — tells the server "when someone hits /DisplayServlet, run DisplayServlet.java"
+
+  So when the form in student.html posts to action="DisplayServlet", the container
+  knows exactly which class to call. You can also do this with @WebServlet in the
+  Java file; we have both here so the project works with or without annotations.
 -->
 <web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,23 +14,22 @@
 
   <display-name>Cross Page Posting Demo</display-name>
   <description>
-    Demonstrates Cross Page Posting in Java Servlets.
-    Form data submitted on student.html (Page A) is received
-    and displayed by DisplayServlet.java (Page B).
+    Form on student.html (Page A) posts to DisplayServlet (Page B).
+    This descriptor wires the URL to the Java class that handles it.
   </description>
 
-  <!-- Welcome file: first page loaded when app is accessed -->
+  <!-- If someone visits the app root, show the form first -->
   <welcome-file-list>
     <welcome-file>student.html</welcome-file>
   </welcome-file-list>
 
-  <!-- Servlet Declaration -->
+  <!-- Declare the servlet: "DisplayServlet" is implemented by class DisplayServlet -->
   <servlet>
     <servlet-name>DisplayServlet</servlet-name>
     <servlet-class>DisplayServlet</servlet-class>
   </servlet>
 
-  <!-- Servlet Mapping: maps URL to the servlet above -->
+  <!-- Bind the path /DisplayServlet to that servlet -->
   <servlet-mapping>
     <servlet-name>DisplayServlet</servlet-name>
     <url-pattern>/DisplayServlet</url-pattern>

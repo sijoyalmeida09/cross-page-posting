@@ -1,3 +1,7 @@
+# Pushes to main trigger a deploy of the live-demo (PHP) to the server.
+# The Java servlet demo runs locally or in your own Tomcat; this workflow
+# only deploys the PHP version so the concept can be tried in the browser.
+
 name: Deploy Live Demo to Sijoy 2.0
 
 on:
@@ -12,6 +16,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Ensure the folder exists before we copy files into it
       - name: Create target directory on server
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -22,6 +27,7 @@ jobs:
           script: |
             mkdir -p ~/domains/joshoit.com/public_html/hub.joshoit.com/servlet-demo
 
+      # Upload index.html and display.php to the live demo path
       - name: Deploy live-demo files via SCP
         uses: appleboy/scp-action@v0.1.7
         with:

@@ -1,29 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
+<!--
+  Page A — the form page.
+  User enters Roll Number and Course; on Submit, data is sent to DisplayServlet (Page B).
+  That's Cross Page Posting: form lives here, result is shown on a different page.
+-->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Registration (Servlet)</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Form — Cross Page Posting</title>
+  <!-- Styles: card layout, form fields, submit button, and a small "how it works" note -->
+  <style>
+    /* Reset and full-height centering so the form sits nicely in the viewport */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 40px 48px;
+      max-width: 440px;
+      width: 100%;
+    }
+
+    .card::before {
+      content: '';
+      display: block;
+      height: 4px;
+      background: linear-gradient(90deg, #2196F3, #64B5F6);
+      border-radius: 4px 4px 0 0;
+      margin: -40px -48px 30px;
+    }
+
+    h2 {
+      font-size: 22px;
+      color: #1565C0;
+      margin-bottom: 6px;
+    }
+
+    .sub {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .field { margin-bottom: 20px; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 6px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #222;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #2196F3;
+      box-shadow: 0 0 0 3px rgba(33,150,243,0.1);
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      padding: 13px;
+      background: #1565C0;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+
+    input[type="submit"]:hover { background: #0d47a1; }
+
+    .note {
+      margin-top: 20px;
+      padding: 12px 14px;
+      background: #e3f2fd;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #1565C0;
+      line-height: 1.6;
+    }
+
+    code {
+      background: #bbdefb;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+  </style>
 </head>
 <body>
-    <h2>Student Registration Form</h2>
-    <form action="DisplayServlet" method="POST">
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name" required><br><br>
 
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" required><br><br>
+  <!-- Main card: title, short explanation, form, and a friendly note about Cross Page Posting -->
+  <div class="card">
+    <h2>&#x1F4CB; Student Information</h2>
+    <p class="sub">
+      Enter details below. Data will be posted to
+      <strong>DisplayServlet</strong> — a different page.<br>
+      This demonstrates <strong>Cross Page Posting</strong>.
+    </p>
 
-        <label for="studentId">Student ID:</label><br>
-        <input type="text" id="studentId" name="studentId" required><br><br>
+    <!--
+      The important bit: action points to DisplayServlet, not back to this file.
+      So when the user hits Submit, the browser POSTs to Page B — that's Cross Page Posting.
+    -->
+    <form method="post" action="DisplayServlet">
 
-        <label for="major">Major:</label><br>
-        <input type="text" id="major" name="major"><br><br>
+      <!-- name="rollno" is what DisplayServlet will read via request.getParameter("rollno") -->
+      <div class="field">
+        <label for="rollno">Roll Number</label>
+        <input
+          type="text"
+          id="rollno"
+          name="rollno"
+          placeholder="Enter Roll Number"
+          required
+        >
+      </div>
 
-        <label for="gpa">GPA:</label><br>
-        <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="4"><br><br>
+      <!-- name="course" becomes request.getParameter("course") on the servlet side -->
+      <div class="field">
+        <label for="course">Course Name</label>
+        <input
+          type="text"
+          id="course"
+          name="course"
+          placeholder="Enter Course Name"
+          required
+        >
+      </div>
 
-        <input type="submit" value="Submit">
+      <input type="submit" value="Submit">
+
     </form>
+
+    <!-- Quick reminder for anyone reading the source: post + different action = Cross Page Posting -->
+    <div class="note">
+      <strong>How this works:</strong><br>
+      <code>method="post"</code> sends data in the request body.<br>
+      <code>action="DisplayServlet"</code> routes to a different servlet (Page B).<br>
+      This is <strong>Cross Page Posting</strong> — not a postback.
+    </div>
+  </div>
+
 </body>
 </html>

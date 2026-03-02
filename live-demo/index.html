@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+<!--
+  Live demo — Page A (input form).
+  Same idea as java-servlet/student.html: user enters Roll No and Course,
+  then submits. Here we post to display.php (PHP stand-in for DisplayServlet).
+-->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,8 +12,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
+    /* Reset and box model */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+    /* Design tokens: colors and fonts so we can tweak the look in one place */
     :root {
       --bg: #faf8f4;
       --ink: #1a1814;
@@ -25,6 +32,7 @@
 
     html { height: 100%; }
 
+    /* Full-height layout: header, main content, footer */
     body {
       background: var(--bg);
       color: var(--ink);
@@ -35,7 +43,7 @@
       position: relative;
     }
 
-    /* Paper texture */
+    /* Subtle background texture so it doesn't feel flat */
     body::before {
       content: '';
       position: fixed;
@@ -46,7 +54,7 @@
       pointer-events: none;
     }
 
-    /* Grid lines like a notebook */
+    /* Light grid lines (notebook feel) — non-interactive overlay */
     body::after {
       content: '';
       position: fixed;
@@ -57,7 +65,7 @@
       opacity: 0.6;
     }
 
-    /* HEADER */
+    /* ── Header: logo and tagline ── */
     header {
       padding: 24px 40px;
       border-bottom: 1px solid var(--border);
@@ -85,7 +93,7 @@
       text-transform: uppercase;
     }
 
-    /* MAIN */
+    /* ── Main: centered card that holds the form ── */
     main {
       display: flex;
       align-items: center;
@@ -189,7 +197,7 @@
 
     .flow-arrow { opacity: 0.5; font-size: 12px; }
 
-    /* FORM */
+    /* ── Form area: labels, inputs, submit button ── */
     .card-body { padding: 32px 36px; }
 
     .field { margin-bottom: 24px; }
@@ -295,7 +303,7 @@
       border-radius: 2px;
     }
 
-    /* FOOTER */
+    /* ── Footer: host info and status ── */
     footer {
       padding: 20px 40px;
       border-top: 1px solid var(--border);
@@ -341,11 +349,13 @@
 </head>
 <body>
 
+  <!-- Top bar: app name and tech tag -->
   <header>
     <div class="logo">JOSHO<span>IT</span>.COM / cross-page-demo</div>
     <div class="header-tag">Java Servlet · Cross Page Posting</div>
   </header>
 
+  <!-- Form card: title, flow diagram, and the actual form that posts to display.php -->
   <main>
     <div class="card">
       <div class="card-header">
@@ -362,6 +372,7 @@
       </div>
 
       <div class="card-body">
+        <!-- Cross Page Posting: action points to display.php (Page B), not back to this file -->
         <form method="POST" action="display.php">
 
           <div class="field">

@@ -4,24 +4,20 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.WebServlet;
 
 /**
- * DisplayServlet.java
- * 
- * CROSS PAGE POSTING DEMONSTRATION
- * ---------------------------------
- * This servlet demonstrates Cross Page Posting in Java Servlets.
- * 
- * Flow:
- *   student.html  ──[POST]──►  DisplayServlet.java
- *   (Page A)                   (Page B)
- * 
- * The form in student.html has action="DisplayServlet"
- * which routes the POST request to this servlet.
- * 
- * Key Concepts:
- *   - HttpServletRequest  : carries form data from Page A
- *   - HttpServletResponse : sends dynamic HTML back to browser
- *   - getParameter()      : extracts named form fields
- * 
+ * DisplayServlet.java — Page B in our Cross Page Posting demo
+ *
+ * Think of this as the "receiving end": when a student fills out the form on
+ * student.html (Page A) and hits Submit, the browser sends that data here.
+ * We read it, optionally validate it, and send back a nice HTML summary.
+ *
+ * Flow:  student.html  ──[POST]──►  DisplayServlet  ──►  HTML response
+ *        (Page A)                   (this class)         (what the user sees)
+ *
+ * In short:
+ *   - HttpServletRequest  : holds whatever the form sent (rollno, course, etc.)
+ *   - getParameter("name"): grabs a form field by its name attribute
+ *   - HttpServletResponse : we write HTML into this and it goes to the browser
+ *
  * @author  [Your Name]
  * @course  [Course Name]
  * @version 1.0
@@ -30,27 +26,27 @@ import javax.servlet.annotation.WebServlet;
 public class DisplayServlet extends HttpServlet {
 
     /**
-     * doPost() — handles the POST request from student.html
-     * 
-     * This is the heart of Cross Page Posting.
-     * Data submitted on Page A arrives here (Page B) via HTTP POST.
+     * doPost() — where the magic happens.
+     * When the user submits the form on student.html, the browser sends a POST
+     * request to this servlet. We pull out the form fields and build the
+     * "thank you" page they see.
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // ── STEP 1: Read parameters sent from student.html ──────────────
+        // Pull out whatever the form sent — same names as the input "name" attributes
         String rollNo = request.getParameter("rollno");
         String course = request.getParameter("course");
 
-        // Basic validation
+        // If someone left a field blank or sent junk, show something friendly instead of "null"
         if (rollNo == null || rollNo.trim().isEmpty()) rollNo = "Not provided";
         if (course  == null || course.trim().isEmpty())  course  = "Not provided";
 
-        // ── STEP 2: Set the response content type ───────────────────────
+        // Tell the browser we're sending back HTML (and in UTF-8 so special chars work)
         response.setContentType("text/html;charset=UTF-8");
 
-        // ── STEP 3: Write the HTML response ────────────────────────────
+        // Get a writer and build the response page line by line
         PrintWriter out = response.getWriter();
 
         out.println("<!DOCTYPE html>");
@@ -90,6 +86,7 @@ public class DisplayServlet extends HttpServlet {
         out.println("  </style>");
         out.println("</head>");
         out.println("<body>");
+        // Card layout: title, table of received data, and a link to go back and try again
         out.println("  <div class='card'>");
         out.println("    <h2>&#x1F4CB; Student Details</h2>");
         out.println("    <div class='sub'>Received via Cross Page Posting from student.html</div>");
@@ -124,8 +121,9 @@ public class DisplayServlet extends HttpServlet {
     }
 
     /**
-     * doGet() — redirects GET requests back to the form
-     * Prevents direct URL access to this servlet without form data
+     * doGet() — if someone visits /DisplayServlet directly in the address bar,
+     * we don't have any form data to show. So we just send them back to the
+     * form page. Keeps the flow sensible.
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -134,8 +132,9 @@ public class DisplayServlet extends HttpServlet {
     }
 
     /**
-     * escapeHtml() — basic XSS prevention
-     * Always sanitize user input before outputting to HTML
+     * escapeHtml() — safety first.
+     * User input could contain <script> or other HTML. We escape special
+     * characters so it shows as plain text instead of running or breaking the page.
      */
     private String escapeHtml(String input) {
         if (input == null) return "";

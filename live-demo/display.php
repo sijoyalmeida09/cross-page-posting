@@ -1,29 +1,37 @@
 <?php
 /**
- * display.php — Cross Page Posting Handler
- * PHP equivalent of Java's DisplayServlet.java
+ * display.php — Page B in the Cross Page Posting demo
  *
- * Concept: Page A (index.html) POSTs data → Page B (display.php) receives and displays it
- * Java equivalent: request.getParameter("rollno") === $_POST["rollno"]
+ * This is the PHP counterpart to DisplayServlet.java. When the user submits
+ * the form on index.html, the browser POSTs here. We read the fields (same
+ * idea as request.getParameter() in Java), sanitize them, and render the
+ * "thank you" page with the data they sent.
+ *
+ * Flow:  index.html  ──[POST]──►  display.php  ──►  HTML result page
  */
 
+// If someone lands here via GET (e.g. typed the URL), send them back to the form
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: index.html');
     exit;
 }
 
+// Grab what the form sent and escape it so we don't output raw HTML (XSS safety)
 $rollNo = htmlspecialchars(trim($_POST['rollno'] ?? ''), ENT_QUOTES, 'UTF-8');
 $course  = htmlspecialchars(trim($_POST['course']  ?? ''), ENT_QUOTES, 'UTF-8');
 
+// Missing data? Redirect back to the form instead of showing a half-empty page
 if (empty($rollNo) || empty($course)) {
     header('Location: index.html');
     exit;
 }
 
+// Handy for the footer and "when did we receive this" display
 $timestamp = date('d M Y, H:i:s');
 ?>
 <!DOCTYPE html>
 <html lang="en">
+<!-- Output: the "result" page — shows what we received from the form on index.html -->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,6 +39,7 @@ $timestamp = date('d M Y, H:i:s');
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
+    /* Reset and design tokens (match index.html for consistent look) */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
@@ -267,11 +276,12 @@ $timestamp = date('d M Y, H:i:s');
       font-size: 11px;
     }
 
+    /* Small badges for HTTP method, source page, handler name */
     .tag-green { background: var(--green-light); color: var(--green); }
     .tag-orange { background: var(--accent-light); color: var(--accent); }
     .tag-gray { background: #f0ece6; color: var(--ink-dim); }
 
-    /* CODE BLOCK */
+    /* Code snippet showing Java vs PHP equivalence for reading form data */
     .code-block {
       background: #1a1814;
       border-radius: 4px;
@@ -379,6 +389,7 @@ $timestamp = date('d M Y, H:i:s');
 
       <div class="card-body">
 
+        <!-- Table of what we received: roll no, course, and a bit of meta info -->
         <table class="data-table">
           <tr>
             <td class="td-key">Roll Number</td>
@@ -406,7 +417,7 @@ $timestamp = date('d M Y, H:i:s');
           </tr>
         </table>
 
-        <!-- Code equivalence block -->
+        <!-- For folks comparing Java servlets to PHP: same idea, different syntax -->
         <div class="code-block">
           <div class="code-top">
             <div class="code-dots">
@@ -427,6 +438,7 @@ $timestamp = date('d M Y, H:i:s');
           </div>
         </div>
 
+        <!-- Back to the form so they can try again with different data -->
         <a href="index.html" class="back-link">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
           ← Back to student.html (Page A)
