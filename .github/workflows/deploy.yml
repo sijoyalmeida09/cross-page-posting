@@ -1,13 +1,28 @@
-name: Deploy to Hostinger
+name: Deploy Live Demo to Sijoy 2.0
+
 on:
   push:
     branches: [main]
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Deploy via SCP
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create target directory on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            mkdir -p ~/domains/joshoit.com/public_html/hub.joshoit.com/servlet-demo
+
+      - name: Deploy live-demo files via SCP
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
